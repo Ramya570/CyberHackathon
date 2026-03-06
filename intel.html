@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bharat SIM Intel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,#02060f,#08162b);
+    font-family:Consolas, monospace;
+    color:#00ff9c;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+}
+.container{
+    width:100%;
+    max-width:1100px;
+    background:#000000cc;
+    border:1px solid #00ff9c;
+    border-radius:10px;
+    padding:20px;
+}
+h1{text-align:center;color:#00ffaa}
+input,textarea,button{
+    width:100%;
+    padding:10px;
+    margin:6px 0;
+    background:black;
+    color:#00ff9c;
+    border:1px solid #00ff9c;
+}
+button:hover{
+    background:#00ff9c;
+    color:black;
+    cursor:pointer;
+}
+.hidden{display:none}
+.panel{
+    border:1px solid #00ff9c55;
+    padding:15px;
+    margin-top:15px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th,td{
+    border:1px solid #00ff9c;
+    padding:6px;
+    text-align:center;
+}
+@media(max-width:600px){
+    th,td{font-size:12px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>🛡 Bharat SIM Intel</h1>
+
+<div id="login">
+    <h3>Officer Login</h3>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+</div>
+
+<div id="dash" class="hidden">
+    <div class="panel">
+        <h3>Bulk Number Analysis</h3>
+        <textarea id="nums" rows="4" placeholder="One number per line"></textarea>
+        <button onclick="analyze()">Analyze</button>
+    </div>
+
+    <div class="panel">
+        <input type="file" id="csv">
+        <button onclick="upload()">Upload CSV</button>
+    </div>
+
+    <div class="panel">
+        <table id="tbl">
+            <tr>
+                <th>Number</th>
+                <th>Operator</th>
+                <th>Circle</th>
+                <th>Risk</th>
+                <th>Confidence</th>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>
+
+<script>
+function login(){
+    fetch("http://127.0.0.1:5000/login",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            username:user.value,
+            password:pass.value
+        })
+    })
+    .then(r=>r.json())
+    .then(d=>{
+        if(d.status=="success"){
+            login.classList.add("hidden")
+            dash.classList.remove("hidden")
+        } else alert("Invalid credentials")
+    })
+}
+
+function analyze(){
+    let list = nums.value.split("\n").map(x=>x.trim()).filter(x=>x.length==10)
+    fetch("http://127.0.0.1:5000/analyze",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({numbers:list})
+    }).then(r=>r.json()).then(show)
+}
+
+function upload(){
+    let f = csv.files[0]
+    let fd = new FormData()
+    fd.append("file",f)
+    fetch("http://127.0.0.1:5000/upload_csv",{method:"POST",body:fd})
+    .then(r=>r.json()).then(show)
+}
+
+function show(data){
+    tbl.innerHTML=`<tr>
+    <th>Number</th><th>Operator</th><th>Circle</th><th>Risk</th><th>Confidence</th></tr>`
+    data.forEach(r=>{
+        let row=tbl.insertRow()
+        row.insertCell(0).innerText=r.number
+        row.insertCell(1).innerText=r.operator
+        row.insertCell(2).innerText=r.circle
+        row.insertCell(3).innerText=r.risk
+        row.insertCell(4).innerText=r.confidence+"%"
+    })
+}
+</script>
+
+</body>
+</html>

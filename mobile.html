@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bharat SIM Intel – Cyber Intelligence Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#0b1220;
+  --panel:#121b2f;
+  --accent:#00e0ff;
+  --danger:#ff4d4d;
+  --warn:#ffb84d;
+  --safe:#4dff88;
+  --text:#e8f1ff;
+}
+
+*{box-sizing:border-box;font-family:Segoe UI,Arial}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.container{
+  display:flex;
+  height:100vh;
+}
+
+.sidebar{
+  width:240px;
+  background:#080f1d;
+  padding:20px;
+}
+
+.sidebar h2{
+  color:var(--accent);
+  margin-bottom:30px;
+}
+
+.sidebar button{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  background:var(--panel);
+  color:var(--text);
+  border:none;
+  cursor:pointer;
+  border-radius:6px;
+}
+
+.sidebar button:hover{
+  background:var(--accent);
+  color:#000;
+}
+
+.main{
+  flex:1;
+  padding:20px;
+  overflow:auto;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  margin:20px 0;
+}
+
+.card{
+  background:var(--panel);
+  padding:20px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.card h3{margin:0;color:var(--accent)}
+.card p{font-size:22px;margin:10px 0 0}
+
+.input-area{
+  background:var(--panel);
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  margin:10px 0;
+}
+
+button.action{
+  background:var(--accent);
+  border:none;
+  padding:12px 20px;
+  cursor:pointer;
+  border-radius:6px;
+  font-weight:bold;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:var(--panel);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+th,td{
+  padding:12px;
+  text-align:center;
+  border-bottom:1px solid #1f2a44;
+}
+
+th{background:#0e1730;color:var(--accent)}
+
+.badge{
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+.low{background:var(--safe);color:#000}
+.medium{background:var(--warn);color:#000}
+.high{background:var(--danger)}
+
+footer{
+  text-align:center;
+  margin-top:20px;
+  font-size:12px;
+  opacity:.7;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="sidebar">
+    <h2>🚔 SIM INTEL</h2>
+    <button>Dashboard</button>
+    <button>Bulk Analysis</button>
+    <button>Case Review</button>
+    <button>Reports</button>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1>Cyber Mobile Number Intelligence</h1>
+      <strong>Officer Login: ADMIN</strong>
+    </div>
+
+    <div class="stats">
+      <div class="card">
+        <h3>Total Numbers</h3>
+        <p id="total">0</p>
+      </div>
+      <div class="card">
+        <h3>High Risk</h3>
+        <p id="high">0</p>
+      </div>
+      <div class="card">
+        <h3>Medium Risk</h3>
+        <p id="medium">0</p>
+      </div>
+      <div class="card">
+        <h3>Low Risk</h3>
+        <p id="low">0</p>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <h3>Bulk Mobile Number Input</h3>
+      <textarea id="numbers" rows="5"
+        placeholder="Enter mobile numbers separated by comma or new line"></textarea>
+      <button class="action" onclick="analyze()">Analyze Numbers</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Mobile Number</th>
+          <th>Operator</th>
+          <th>Circle</th>
+          <th>Risk Score</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="result"></tbody>
+    </table>
+
+    <footer>
+      Bharat SIM Intel © Cyber Crime Investigation Support Tool
+    </footer>
+  </div>
+
+</div>
+
+<script>
+const operatorMap = {
+  "6":"Jio",
+  "7":"Airtel",
+  "8":"VI",
+  "9":"BSNL"
+};
+
+const circleMap = [
+  "Delhi","Maharashtra","Tamil Nadu","Karnataka",
+  "Uttar Pradesh","Bihar","West Bengal","Rajasthan"
+];
+
+function analyze(){
+  const input = document.getElementById("numbers").value;
+  const list = input.split(/[\n,]+/).map(n=>n.trim()).filter(n=>n.length===10);
+  const tbody = document.getElementById("result");
+  tbody.innerHTML="";
+
+  let high=0,med=0,low=0;
+
+  list.forEach(num=>{
+    const operator = operatorMap[num[0]] || "Unknown";
+    const circle = circleMap[Math.floor(Math.random()*circleMap.length)];
+    const score = Math.floor(Math.random()*100);
+
+    let level="Low",cls="low";
+    if(score>60){level="High";cls="high";high++}
+    else if(score>30){level="Medium";cls="medium";med++}
+    else{low++}
+
+    const row = `
+      <tr>
+        <td>${num}</td>
+        <td>${operator}</td>
+        <td>${circle}</td>
+        <td>${score}</td>
+        <td><span class="badge ${cls}">${level}</span></td>
+      </tr>`;
+    tbody.innerHTML += row;
+  });
+
+  document.getElementById("total").innerText=list.length;
+  document.getElementById("high").innerText=high;
+  document.getElementById("medium").innerText=med;
+  document.getElementById("low").innerText=low;
+}
+</script>
+</body>
+</html>
