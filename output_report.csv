@@ -1,0 +1,21 @@
+Mobile Number,Operator,Circle,State,Status,Risk Level,Processed At
+9876543210,Airtel,Delhi,Delhi,Valid,Low,2026-01-04 06:01:22
+9876687654,Jio,Maharashtra,Maharashtra,Valid,Low,2026-01-04 06:01:22
+9876798765,VI,Karnataka,Karnataka,Valid,Low,2026-01-04 06:01:22
+7012345678,VI,Kerala,Kerala,Valid,Low,2026-01-04 06:01:22
+7012456789,Airtel,Telangana,Telangana,Valid,Low,2026-01-04 06:01:22
+9431023456,BSNL,Bihar,Bihar,Valid,Low,2026-01-04 06:01:22
+9899012345,Airtel,Mumbai,Maharashtra,Valid,Low,2026-01-04 06:01:22
+9899212345,VI,Punjab,Punjab,Valid,Low,2026-01-04 06:01:22
+9495012345,Jio,Tamil Nadu,Tamil Nadu,Valid,Low,2026-01-04 06:01:22
+9000112345,Airtel,Uttar Pradesh East,Uttar Pradesh,Valid,Low,2026-01-04 06:01:22
+9000212345,Jio,Uttar Pradesh West,Uttar Pradesh,Valid,Low,2026-01-04 06:01:22
+9000312345,VI,West Bengal,West Bengal,Valid,Low,2026-01-04 06:01:22
+9000412345,Airtel,Assam,Assam,Valid,Low,2026-01-04 06:01:22
+9000512345,Jio,North East,Assam/Manipur,Valid,Low,2026-01-04 06:01:22
+9000612345,BSNL,Jammu & Kashmir,Jammu & Kashmir,Valid,Low,2026-01-04 06:01:22
+9000712345,VI,Himachal Pradesh,Himachal Pradesh,Valid,Low,2026-01-04 06:01:22
+9000812345,Airtel,Madhya Pradesh,Madhya Pradesh,Valid,Low,2026-01-04 06:01:22
+9000912345,Jio,Chhattisgarh,Chhattisgarh,Valid,Low,2026-01-04 06:01:22
+12345,-,-,-,Invalid,High,2026-01-04 06:01:22
+abcdefghij,-,-,-,Invalid,High,2026-01-04 06:01:22
